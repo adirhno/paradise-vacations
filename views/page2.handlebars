@@ -1,0 +1,152 @@
+<html lang="en">
+  <head>
+     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+    <title>Document</title>
+  </head>
+   <style>
+  .pagination{
+    margin-left: 50%;
+  }
+  .col-sm-4{padding-bottom: 20px;}
+  .main-footer{margin-top: 20%;}
+    .glyphicon {cursor: pointer;
+     position: absolute;
+      top: 5px;
+      right:5px; 
+    }
+
+    [data-status='fol']{
+  color:rgb(255, 225, 0)
+};
+ .card-header{
+      width: 100%;
+      height: 70px;
+    }
+
+
+  .card-success{
+    width:100%;
+   height: 240px;
+  }
+  
+  </style>
+
+<body>
+   
+     <div style="padding: 4px"  class="row" id="vacations2"></div>
+     <div class="pagination">
+  <a href="#">&laquo;</a>
+  <a href="/profile">1</a>
+  <a href="/p2">2</a>
+  <a href="/p3">3</a>
+  <a href="#">4</a>
+  <a href="#">5</a>
+  <a href="#">6</a>
+  <a href="#">&raquo;</a>
+</div>
+
+</body>
+<script>
+   
+$(document).ready(function () {
+  console.log("from page 2");
+
+  $.ajax({
+    url: "https://vacpar.herokuapp.com/page2",
+
+    success: function (res) {
+      let vacations = res.vacations;
+      var drawing = "";
+      vacations.forEach((vacation) => {
+        let end_date = new Date(vacation.arriv_date);
+        let endDay = end_date.getDate();
+        if (endDay <= 9) {
+          endDay = `0${end_date.getDate()}`;
+        } else {
+          endDay = end_date.getDate();
+        }
+
+        end_date = `${end_date.getFullYear()}-${end_date.getMonth() + 1 }-${endDay} `;
+
+        let start_date = new Date(vacation.start_date);
+        let day = start_date.getDate();
+
+        if (day <= 9) {
+          day = `0${start_date.getDate()}`;
+        } else {
+          day = start_date.getDate();
+        }
+
+        start_date = `${start_date.getFullYear()}-${start_date.getMonth() + 1 }-${day} `;
+
+           drawing += ` <div class="col-sm-4" > <div class="card card-success"> <div
+          class="card-header" style='background-color:#6c757d'> <h3 class="card-title">${vacation.destination}</h3><span style='margin-left:145px' class='glyphicon glyphicon-star' id='${vacation.followers}' data-status='unf' data-id='${vacation.id}'></span> 
+          </div> <div class="card-body">
+          <span><strong>From: </strong></span><sapn>${start_date}</span><br><span><strong>To: </strong></span><span>${end_date}</span>
+          <h4> ${vacation.description}</h4> </div> <div class="card-footer"><span>Price: </span>
+          ${vacation.price}$ </div> </div> </div> `;
+
+        $("#vacations2").html("");
+        $("#vacations2").append(drawing);
+
+        $(".glyphicon-star").on("click", function () {
+          var followers;
+          var thisId;
+
+          if ($(this).attr("data-status") == "unf") {
+            thisId = $(this).attr("data-id");
+
+            $.ajax({
+              url: "https://vacpar.herokuapp.com/followers?id=" + thisId,
+
+              success: function (res) {
+                followers = res.followNum;
+                followers++;
+
+                $.ajax({
+                  url: "https://vacpar.herokuapp.com/add-follower",
+
+                  method: "post",
+                  data: {
+                    id: thisId,
+                    followers: followers,
+                  },
+                  success: function (res) {},
+                });
+              },
+            });
+            $(this).attr("data-status", "fol");
+          } else if ($(this).attr("data-status") == "fol") {
+            $.ajax({
+              url:
+                "https://vacpar.herokuapp.com/followers?id=" + $(this).attr("data-id"),
+              success: function (res) {
+                let unf = res.followNum;
+                unf--;
+
+                $.ajax({
+                  url: "https://vacpar.herokuapp.com/add-follower",
+                  method: "post",
+                  data: {
+                    id: res.theId,
+                    followers: unf,
+                  },
+                  success: function (res) {},
+                });
+              },
+            });
+            $(this).attr("data-status", "unf");
+          }
+        });
+      });
+    },
+  });
+});
+
+</script>
+</html>

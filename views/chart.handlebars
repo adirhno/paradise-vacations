@@ -1,0 +1,69 @@
+
+<html lang="en">
+  <head>
+   <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min.css" />
+
+    <script src="plugins/jquery/jquery.min.js"></script>
+  </head>
+
+  <body><canvas id="myChart" style="width:100%;max-width:600px"></canvas></body>
+<script>
+    
+//chart
+$(document).ready(function(){
+
+    let vacChart={};
+var xValues = [];
+var yValues = [];
+
+
+$.ajax({
+  url:'https://vacpar.herokuapp.com/vacations',
+  success:function(res){
+res.vacations.forEach(function(vacation,index){
+
+if(vacation.followers>0){
+
+vacChart={'title':vacation.destination,'followers':vacation.followers}
+
+xValues.push(vacChart.title);
+yValues.push(vacChart.followers);
+
+}
+})
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      data: yValues,
+       backgroundColor:'#6c757d'
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Vacations Followers Chart"
+    }
+  }
+});
+
+  }
+  
+})
+
+})
+</script>
+</html>

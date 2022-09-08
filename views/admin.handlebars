@@ -1,0 +1,240 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <title>Document</title>
+  </head>
+  <style>
+
+    .col-sm-3{ padding : 20px; } 
+
+    .card-header{ width: 100%; height: 70px; }
+
+     img{
+    width: 100px; height: 80px; } 
+
+    .glyphicon-remove{ position: absolute; top:
+    5px; right:5px;} 
+
+    .glyphicon-pencil{ position: absolute; top: 8px; right:
+    33px;}
+     .card-success{ width:100%; height: 290px; } 
+
+     .col-sm-4{padding-bottom:
+    20px;
+    min-width: 260px;
+    max-width: 280px;} 
+
+    .glyphicon {cursor: pointer; } 
+
+    .addBtn2{ border: 2px solid rgb(19,
+    19, 19); padding: 5px; } 
+
+    .pagination { display: inline-block; } 
+
+    .pagination
+    a { color: black; float: left; padding: 8px 16px; text-decoration: none; }
+
+    
+  </style>
+  <body>
+
+    <div class="row" id="admin"></div>
+
+    <div id="ida"></div>
+
+  </body>
+
+  <script>
+
+$(document).ready(() => {
+  $.ajax({
+    url: "https://vacpar.herokuapp.com/vacationsa",
+    success: function (res) {
+      let vacations = res.vacations;
+      let drawingVac = "";
+      var id = 1;
+
+      vacations.forEach((vacation) => {
+        let end_date = new Date(vacation.arriv_date);
+        let endDay = end_date.getDate();
+        if (endDay <= 9) {
+          endDay = `0${end_date.getDate()}`;
+        } else {
+          endDay = end_date.getDate();
+        }
+
+        end_date = `${end_date.getFullYear()}-${end_date.getMonth() + 1}-${endDay} `;
+
+        let start_date = new Date(vacation.start_date);
+        let day = start_date.getDate();
+
+        if (day <= 9) {
+          day = `0${start_date.getDate()}`;
+        } else {
+          day = start_date.getDate();
+        }
+
+        start_date = `${start_date.getFullYear()}-${ start_date.getMonth() + 1 }-${day} `;
+
+           drawingVac += `
+          <div class="col-sm-4"> 
+          <div class="card card-success"> 
+              <div class="card-header"  style='background-color:#6c757d' ><div>
+              <span id='${vacation.id}' class="glyphicon glyphicon-remove" style='margin-left:155px'></span></div>
+                    <div class="card-title"><h3>${vacation.destination}</h3> </div>
+                </div>
+                <div class="card-body"><span id='${vacation.id}' style='margin-left:160px'; class="glyphicon glyphicon-pencil"></span>
+          <span><strong>From: </strong></span><sapn>${start_date}</span><br><span><strong>To: </strong></span><span>${end_date}</span>
+          <br><span><img src='https://picsum.photos/200/200' alt='${vacation.destination}'></span>
+          <h6> ${vacation.description}</h6> </div> 
+
+          <div class="card-footer">${vacation.price}$ </div>  
+          </div> 
+          </div> `;
+
+        $("#admin").html("");
+        $("#admin").append(drawingVac);
+      });
+
+      $(".glyphicon-pencil").on("click", function () {
+        var theId = $(this).attr("id");
+        $.ajax({
+          url: "https://vacpar.herokuapp.com/edit?id=" + theId,
+          async: false,
+          success: function (res) {
+            let vacation = JSON.stringify(res.vacation[0]);
+
+            let start_date = new Date(res.vacation[0].start_date);
+            let day = start_date.getDate();
+            let month = start_date.getMonth();
+
+            if (day <= 9) {
+              day = `0${start_date.getDate()}`;
+            } else {
+              day = start_date.getDate();
+            }
+            if (month <= 9) {
+              month = `0${start_date.getMonth() + 1}`;
+              console.log("lower");
+            } else {
+              month = start_date.getMonth() + 1;
+            }
+
+            let startDate = `${start_date.getFullYear()}-${month}-${day}`;
+            let end_date = new Date(res.vacation[0].arriv_date);
+            let month2 = end_date.getMonth();
+            let endDay = end_date.getDate();
+
+            if (endDay <= 9) {
+              endDay = `0${end_date.getDate()}`;
+            } else {
+              endDay = end_date.getDate();
+            }
+            if (month2 <= 9) {
+              month2 = `0${end_date.getMonth() + 1}`;
+            } else {
+              month2 = end_date.getMonth() + 1;
+            }
+
+             console.log(`${end_date.getFullYear()}-${month2}-${endDay} `);
+
+             let aend_date = `${end_date.getFullYear()}-${month2}-${endDay}`;
+
+                console.log(startDate);
+               let edit = "";
+
+                edit += `
+                  <div style="display: block;" class="w3-modal editModal" >
+                  <div  class="w3-modal-content"  style="width: 340px; height:350px;">
+                  <form style='padding:24px'>
+                  
+                  <h2 style="text-align: center;">Edit Vacation</h2>
+                  <br>
+                  <input type='text' placeholder='description' id="descriptiona" value="${res.vacation[0].description}">
+                  <br>
+                  <input type='text' placeholder='destination' id="destinationa" value='${res.vacation[0].destination}'>
+                  <br>
+                  <input type='date' placeholder='start' id="starta" >
+                  <br><span>to</span><br>
+                  <input type='date' placeholder='end' id="enda" >
+                  <br><input type="number" placeholder="Price" id="pricea" value='${res.vacation[0].price}'><br>
+                      <br> <button class='updatBtn' id="updatBtn">Update</button>
+                  <button class='cancelb'>Cancel</button>
+                  </form>
+                  </div>
+                  </div>`;
+
+            $("#ida").append(edit);
+            $("#enda").val(aend_date);
+            $("#starta").val(startDate);
+
+            $(".cancelb").on("click", function () {
+              console.log("dsa");
+              $(".editModal").css("display", "none");
+            });
+
+            $("#updatBtn").on("click", () => {
+              console.log("cliced from the btn2");
+              let desc = $("#descriptiona").val();
+              let dest = $("#destinationa").val();
+              let start = $("#starta").val();
+              let end = $("#enda").val();
+              let price = $("#pricea").val();
+
+              console.log("start and end " + start + end);
+
+              $.ajax({
+                url: `https://vacpar.herokuapp.com/set-edit`,
+                method: "post",
+                data: {
+                  id: theId,
+                  description: desc,
+                  destintaion: dest,
+                  startDate: start,
+                  endDate: end,
+                  price: price,
+                },
+                success: function () {
+                  location.reload();
+                },
+              });
+            });
+          },
+        });
+      });
+
+      $(".glyphicon-remove").click(function () {
+        let that = $(this).attr("id");
+        console.log(that);
+
+        $.ajax({
+          url: "https://vacpar.herokuapp.com/delete?id=" + that,
+          success: function () {},
+        });
+
+        $(this).parent().parent().parent().remove();
+        location.href = "/admin";
+      });
+    },
+  });
+});
+
+  </script>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <script src="https://www.gstatic.com/firebasejs/9.3.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.3.0/firebase-auth-compat.js"></script>
+  
+<script src="../../plugins/jquery/jquery.min.js"></script>
+
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="../../dist/js/adminlte.min.js?v=3.2.0"></script>
+
+  <title>Document</title>
+</head>
+<body>
+<div class="login-box" style="margin-left:167px">
+  <div class="login-logo">
+  <B>WELCOME</B>
+  </div>
+  <BR>
+
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Sign in </p>
+      <form>
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            id="userName"
+            class="form-control"
+            placeholder="User Name"
+          />
+          <div class="input-group-append">
+            <div class="input-group-text">
+
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            placeholder="Password"
+          />
+          <div class="input-group-append">
+            <div class="input-group-text">
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="col-4">
+            <button
+              type="button"
+              class="btn btn-primary btn-block"
+              id="signIn"
+            >Sign In</button>
+           
+          </div>
+          <div class="col-4">
+             <button id="gmailBtn" type="button" class="btn btn-primary btn-block">Google
+          <i class="fab fa-google"></i>
+        </button>
+          </div>
+           <br><br>
+
+           <a href="https://vacpar.herokuapp.com/registration">New User? Sign Up</a>
+
+        </div>
+      </form>
+      
+    </div>
+
+  </div>
+</div>
+
+<script>
+ 
+
+       const firebaseConfig = {
+    apiKey: "AIzaSyALAmKvJN6IAz1dw1VD74WIClFDQoZd5xE",
+    authDomain: "practice-9dc90.firebaseapp.com",
+    projectId: "practice-9dc90",
+    storageBucket: "practice-9dc90.appspot.com",
+    messagingSenderId: "1091087841718",
+    appId: "1:1091087841718:web:a1f4ea5be1eeac73942917",
+    measurementId: "G-QGNW3QJWNR"
+  };
+
+  var authName;
+   var pas;
+      
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const facebookProvider = new firebase.auth.FacebookAuthProvider();
+        document.getElementById('gmailBtn').addEventListener('click', function() {
+      
+       const provider = new firebase.auth.GoogleAuthProvider();
+       const promise = auth.signInWithPopup(provider);
+       promise.then(function(result) {
+        
+        const user = auth.currentUser;
+        authName=user.displayName
+
+      $.ajax({
+        url:`https://vacpar.herokuapp.com/auth-log`,
+         method:'post',
+          data:{
+          authName:authName,
+        },
+        success:function(res){
+          if(res.nam==authName){
+            location.href='/authlog'
+          }else{alert('not the same')}
+        }
+      })
+
+         
+       }).catch(function(err) {
+           console.log(err);
+       });
+   });
+ 
+$(document).ready(() => {
+  console.log("from the adin login");
+
+  $("#signIn").on("click", () => {
+    let userName = $("#userName").val();
+    let pass = $("#password").val();
+
+    $.ajax({
+      url: "https://vacpar.herokuapp.com/login",
+      data: {
+        userName: userName,
+        password: pass,
+      },
+      success: function (res) {
+        if (res.err) {
+          alert(res.err);
+        } else if (res.admin) {
+          location.href = "/admin";
+        } else {
+          console.log("not admin");
+          location.href = "/profile";
+        }
+      },
+    });
+  });
+});
+
+</script>
+  
+</body>
+</html>
