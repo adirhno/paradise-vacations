@@ -40,13 +40,12 @@ app.use(
     resave: false,
   })
 );
-
-//bc2e44580c7b1d:30e91e75@eu-cdbr-west-03.cleardb.net/heroku_6b05f3ba57dfedc?reconnect=true
+//b80aff40085d38:432d1f77@eu-cdbr-west-03.cleardb.net/heroku_3f73110ec98405d?reconnect=true
 var conn = mysql.createConnection({
   host: "eu-cdbr-west-03.cleardb.net",
-  user: "bc2e44580c7b1d",
-  database: "heroku_6b05f3ba57dfedc",
-  password: "30e91e75",
+  user: "b80aff40085d38",
+  database: "heroku_3f73110ec98405d",
+  password: "432d1f77",
 });
 
 conn.connect();
