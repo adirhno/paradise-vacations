@@ -7,6 +7,7 @@
    
     <script src="https://www.gstatic.com/firebasejs/9.3.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.3.0/firebase-auth-compat.js"></script>
+   
   
 <script src="../../plugins/jquery/jquery.min.js"></script>
 
@@ -83,19 +84,20 @@
 <script>
  
 
-       const firebaseConfig = {
-    apiKey: "AIzaSyALAmKvJN6IAz1dw1VD74WIClFDQoZd5xE",
-    authDomain: "practice-9dc90.firebaseapp.com",
-    projectId: "practice-9dc90",
-    storageBucket: "practice-9dc90.appspot.com",
-    messagingSenderId: "1091087841718",
-    appId: "1:1091087841718:web:a1f4ea5be1eeac73942917",
-    measurementId: "G-QGNW3QJWNR"
-  };
 
   var authName;
    var pas;
-      
+  
+  const firebaseConfig = {
+  apiKey: 'AIzaSyALAmKvJN6IAz1dw1VD74WIClFDQoZd5xE',
+  authDomain: "practice-9dc90.firebaseapp.com",
+  projectId: "practice-9dc90",
+  storageBucket: "practice-9dc90.appspot.com",
+  messagingSenderId: "1091087841718",
+  appId: "1:1091087841718:web:a1f4ea5be1eeac73942917",
+  measurementId: "G-QGNW3QJWNR",
+};
+
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const facebookProvider = new firebase.auth.FacebookAuthProvider();
