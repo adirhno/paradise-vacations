@@ -78,9 +78,9 @@ app.post("/add-follower", (req, res) => {
 
 app.get("/profile", (req, res) => {
   if (req.session.logged || req.session.googLogged) {
-    if (req.session.googLogged > 0) {
+    if (req.session.googLogged) {
       res.render("profile", {
-        user: req.session.googLogged,
+        user: req.session.googLogged[0],
         layout: "default",
       });
     }
@@ -95,7 +95,7 @@ app.get("/profile", (req, res) => {
 });
 
 app.get("/my-vacations", (req, res) => {
-  res.render("myVacations", { user: req.session.googLogged });
+  res.render("myVacations", { user: req.session.googLogged[0] });
 });
 
 app.get("/followers", (req, res) => {
