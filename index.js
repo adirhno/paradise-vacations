@@ -77,18 +77,18 @@ app.post("/add-follower", (req, res) => {
 });
 
 app.get("/profile", (req, res) => {
-  if (req.session.logged || req.session.googLogged) {
-    if (req.session.googLogged[0].first_name != 2) {
-      res.render("profile", {
-        user: req.session.googLogged[0],
-        layout: "default",
-      });
-    }
+  if (req.session.logged) {
     if (req.session.logged[0].permi != 1) {
       res.render("profile", { user: req.session.logged[0], layout: "default" });
     } else {
       res.render("admin", { user: req.session.logged[0], layout: "main" });
     }
+  }
+  if (req.session.googLogged) {
+    res.render("profile", {
+      user: req.session.googLogged[0],
+      layout: "default",
+    });
   } else {
     res.redirect("/");
   }
