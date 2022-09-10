@@ -51,13 +51,13 @@ var conn = mysql.createConnection({
 conn.connect();
 
 app.get("/authlog", (req, res) => {
-  res.render("profile", { layout: "default", user: req.session.logged });
+  res.render("profile", { layout: "default", user: req.session.googLogged });
 });
 
 app.get("/auth-log", (req, res) => {
   let authName = req.query.authName;
-  req.session.logged = { first_name: authName };
-  res.send({ nam: req.session.logged });
+  req.session.googLogged = { first_name: authName };
+  res.send({ nam: req.session.googLogged });
 });
 
 app.post("/upload", upload.single("pic"), (req, res) => {
@@ -77,8 +77,8 @@ app.post("/add-follower", (req, res) => {
 });
 
 app.get("/profile", (req, res) => {
-  if (req.session.logged) {
-    if (req.session.logged[0].permi != 1) {
+  if (req.session.logged ||req.session.googLogged ) {
+    if (req.session.logged[0].permi != 1 || req.session.googLogged) {
       res.render("profile", { user: req.session.logged[0], layout: "default" });
     } else {
       res.render("admin", { user: req.session.logged[0], layout: "main" });
