@@ -86,7 +86,7 @@ app.get("/profile", (req, res) => {
   }
   if (req.session.googLogged) {
     res.render("profile", {
-      user: req.session.googLogged[0],
+      user: req.session.googLogged,
       layout: "default",
     });
   } else {
@@ -95,7 +95,7 @@ app.get("/profile", (req, res) => {
 });
 
 app.get("/my-vacations", (req, res) => {
-  res.render("myVacations", { user: req.session.googLogged[0] });
+  res.render("myVacations", { user: req.session.googLogged });
 });
 
 app.get("/followers", (req, res) => {
