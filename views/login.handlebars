@@ -109,17 +109,13 @@
         
         const user = auth.currentUser;
         authName=user.displayName
+        console.log('made it'+authName)
 
       $.ajax({
-        url:`https://vacpar.herokuapp.com/auth-log`,
-         method:'post',
-          data:{
-          authName:authName,
-        },
-        success:function(res){
-          if(res.nam==authName){
-            location.href='/authlog'
-          }else{alert('not the same')}
+        url:`https://vacpar.herokuapp.com/auth-log?authName=${authName}`,
+      
+        success:function(){
+        location.href='/authlog'
         }
       })
 

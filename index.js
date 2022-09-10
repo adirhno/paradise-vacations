@@ -9,8 +9,6 @@ const multer = require("multer");
 const path = require("path");
 const bodyParser = require("body-parser");
 let Joi = require("joi");
-const en = require("dotenv").config();
-console.log("config" + process.env.API_KEY);
 
 const app = express();
 
@@ -56,12 +54,10 @@ app.get("/authlog", (req, res) => {
   res.render("profile", { layout: "default", user: req.session.logged });
 });
 
-app.post("/auth-log", (req, res) => {
-  let authName = req.body.authName;
+app.get("/auth-log", (req, res) => {
+  let authName = req.query.authName;
   req.session.logged = { first_name: authName };
-
-  req.session.logged = authName;
-  res.send({ nam: req.body.authName });
+  res.send({ nam: req.session.logged });
 });
 
 app.post("/upload", upload.single("pic"), (req, res) => {
