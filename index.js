@@ -78,7 +78,7 @@ app.post("/add-follower", (req, res) => {
 
 app.get("/profile", (req, res) => {
   if (req.session.logged || req.session.googLogged) {
-    if (req.session.googLogged) {
+    if (req.session.googLogged > 1) {
       res.render("profile", {
         user: req.session.googLogged,
         layout: "default",
