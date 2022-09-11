@@ -2,8 +2,9 @@
 
 # Vacations App
 
-- admins can add, edit, and remove vacations.
-- users can see and follow the favorite vacations.
+- Admins can add, edit, and remove vacations.
+- Users can see and follow their favorite vacations.
+- No purchase option, only display.
 
 ## Built with:
 
