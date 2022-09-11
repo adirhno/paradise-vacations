@@ -2,6 +2,9 @@
 
 # Vacations App
 
+- admins can add, edit, remove vacations.
+- users can see and follow the favorite vacations.
+
 ## Built with:
 
 - HTML
