@@ -16,4 +16,4 @@
 
 ## Links:
 
-[WEBSITE](https://vacpar.herokuapp.com/)
+URL: [VACATIONS](https://vacpar.herokuapp.com/)
